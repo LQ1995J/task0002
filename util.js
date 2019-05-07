@@ -59,11 +59,11 @@ function cloneObject(src) {
         case "[object Object]":
             var temp = {}; 
             var keys = Object.keys(src);
-            // keys 为对象src的键名字数组
+            // keys 为对象src的键名字数组,这个方法接收一个对象作为参数，返回一个包含所有可枚举属性的字符串数组。
             // 它是数组！！！
             for(var i=0,a;a=keys[i];i++)
             {
-                temp[a] = cloneObject(src[a]);
+                temp[a] = cloneObject(src[a]);//在 JavaScript 也可以使用方括号表示法来访问对象的属性。在使用方括号语法时，应该将要访问的属性以字符串的形式放在方括号中
             }
             Result = temp;
             delete temp;
