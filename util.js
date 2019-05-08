@@ -143,6 +143,9 @@ console.log(str); // 'hi!'
 // 实现一个遍历数组的方法，针对数组中每一个元素执行fn函数，并将数组索引和元素作为参数传递
 function each(arr, fn) {
     // your implement
+  for(var i =0; i<=arr.length;i++){
+    fn(arr[i],i);
+  }
 }
 
 // 其中fn函数可以接受两个参数：item和index
@@ -162,7 +165,10 @@ function output(item, index) {
 each(arr, output);  // 0:java, 1:c, 2:php, 3:html
 
 // 获取一个对象里面第一层元素的数量，返回一个整数
-function getObjectLength(obj) {}
+function getObjectLength(obj) {
+  var keys = Object.keys(obj);
+  return keys.length;
+}
 
 // 使用示例
 var obj = {
@@ -174,3 +180,247 @@ var obj = {
     }
 };
 console.log(getObjectLength(obj)); // 3
+
+//学习正则表达式，在util.js完成以下代码
+// 判断是否为邮箱地址
+function isEmail(emailStr) {
+    // your implement
+  var patemail = /^[a-zA-z0-9_\.-]+@[a-zA-z0-9\.-]+\.[a-z]{2,6}$/g;
+  var e = patemail.test(emailStr);
+  console.log(e);
+}
+
+// 判断是否为手机号
+function isMobilePhone(phone) {
+    // your implement
+    var ptel = /^1[3578]\d{9}$/g;
+    var t= ptel.test(phone);
+    console.log(t);
+}
+var numtel = 13370707413;
+var emai = "1564763218@qq.com";
+
+isEmail(emai);
+isMobilePhone(numtel);
+
+// 为element增加一个样式名为newClassName的新样式
+function addClass(element, newClassName) {
+    // your implement
+  if (!document.getElementById) return false;
+  var c = element.getElementById(element);
+  c.className = newClassName;
+}
+
+// 移除element中的样式oldClassName
+function removeClass(element, oldClassName) {
+    // your implement
+    if (!document.getElementById) return false;
+    var c = element.getElementById(element);
+    c.className = "";
+}
+
+// 判断siblingNode和element是否为同一个父元素下的同一级的元素，返回bool值
+function isSiblingNode(element, siblingNode) {
+    // your implement
+  var c = element.getElementById(element).parentNode;
+  var s = element.getElementById(siblingNode).parentNode;
+  if(c == s){
+      return true;
+     }else{
+      return false;
+     }
+}
+
+// 获取element相对于浏览器窗口的位置，返回一个对象{x, y}
+function getPosition(element) {
+    // your implement
+  if (!document.getElementById) return false;
+	var offposition = new Array();
+	var odiv = document.getElementById(element);
+	offposition.push(odiv.offsetLeft);
+	offposition.push(odiv.offsetTop);
+	return offposition;  
+}
+// your implement
+
+// 实现一个简单的Query
+function $$(selector,root){
+    var elements=[],allChildren;
+    root=root||document;
+    switch(selector.charAt(0)){
+        case "#":
+            elements.push(root.getElementById(selector.substring(1))); //name =selector.replace(/^#/,"");element.push(document.getElementById(name));
+            break;
+        case ".":
+
+            if(root.getElementsByClassName){
+                elements.push.apply(elements,root.getElementsByClassName(selector.substring(1)));
+            }else{
+                var classReg=new RegExp("\\b"+selector.substring(1)+"\\b");
+                allChildren=root.getElementsByTagName("*");
+                for(var i=0,len=allChildren.length;i<len;i++){
+                    if(classReg.test(allChildren[i].className)){
+                        elements.push(allChildren[i]);
+                    }
+                }
+            }
+            break;
+        case "[":
+            if(selector.indexOf("=")==-1){
+                allChildren=root.getElementsByTagName("*");
+                for(var i=0,len=allChildren.length;i<len;i++){
+                    if(allChildren[i].getAttribute(selector.slice(1,-1))!=null){
+                        elements.push(allChildren[i]);
+                    }
+                }
+            }else{
+                var index=selector.indexOf("=");
+                allChildren=root.getElementsByTagName("*");
+                for(var i=0,len=allChildren.length;i<len;i++){
+                    if(allChildren[i].getAttribute(selector.slice(1,index))==selector.slice(index+1,-1)){
+                        elements.push(allChildren[i]);
+                    }
+                }
+            }
+    }
+    return elements;
+}
+function Q(selector){
+    if(selector.indexOf(" ")!=-1){
+        var selectorArr=selector.split(/\s+/);
+        var arr=$$(selectorArr[0]);
+        for(var i=0,len=arr.length;i<len;i++){
+            if($$(selectorArr[1],$$(selectorArr[0])[i])[0]){
+                return $$(selectorArr[1],$$(selectorArr[0])[i])[0];
+            }
+        }
+    }else{
+        return $$(selector)[0];
+    }
+}
+
+// 可以通过id获取DOM对象，通过#标示，例如
+$("#adom"); // 返回id为adom的DOM对象
+
+// 可以通过tagName获取DOM对象，例如
+$("a"); // 返回第一个<a>对象
+
+// 可以通过样式名称获取DOM对象，例如
+$(".classa"); // 返回第一个样式定义包含classa的对象
+
+// 可以通过attribute匹配获取DOM对象，例如
+$("[data-log]"); // 返回第一个包含属性data-log的对象
+
+$("[data-time=2015]"); // 返回第一个包含属性data-time且值为2015的对象
+
+// 可以通过简单的组合提高查询便利性，例如
+$("#adom .classa"); // 返回id为adom的DOM所包含的所有子节点中，第一个样式定义包含classa的对象
+
+//4. 事件
+//4.1 任务描述
+//我们来继续用封装自己的小jQuery库来实现我们对于JavaScript事件的学习，还是在你的util.js，实现以下函数
+
+// 给一个element绑定一个针对event事件的响应，响应函数为listener
+function addEvent(element, event, listener) {
+    // your implement
+  element.addEventListener("event",listener,false);
+}
+
+// 例如：
+
+addEvent($("#doma"), "click", a);
+
+// 移除element对象对于event事件发生时执行listener的响应
+function removeEvent(element, event, listener) {
+    // your implement
+  if(element.removeEventListener){
+    element.removeEventListener("event",listener,false);
+  }
+}
+  
+//接下来我们实现一些方便的事件方法
+
+// 实现对click事件的绑定
+function addClickEvent(element, listener) {
+    // your implement
+  addEvent(element,"click",listener);
+}
+
+// 实现对于按Enter键时的事件绑定
+function addEnterEvent(element, listener) {
+    // your implement
+  addEvent(element,"keydown", function(e) {
+		if (e.keyCode === 13) {
+			listener();
+		}
+	});
+}
+$.on = function (selector, event, listener) {
+    // your implement
+  return addEvent($(selector), event, listener);
+}
+
+$.un = function(selector, event, listener){
+  return removeEvent($(selector), event, listener);
+}
+
+$.click = function(select,listener){
+  return addClickEvent($(selector), listener);
+}
+
+$.enter = function(select,listener){
+  return addEnterEvent($(selector), listener);
+}
+
+function delegateEvent(element, tag, eventName, listener) {
+    // your implement
+  $.eventName.(element,function(e){
+    var e = e || window.event;
+    var target = e.target || e.srcElement;
+    if (target.nodeName.toLowerCase() === tag) {
+			//?????
+			listener.call(target, e);
+		}
+  });
+}
+
+$.delegate = delegateEvent;
+
+// 使用示例
+// 还是上面那段HTML，实现对list这个ul里面所有li的click事件进行响应
+$.delegate($("#list"), "li", "click", clickHandle);
+
+// 判断是否为IE浏览器，返回-1或者版本号
+function isIE(window.ie) {
+    // your implement
+  alert(navigator.appVersion);
+}
+
+// 设置cookie
+function setCookie(cookieName, cookieValue, expiredays) {
+    // your implement
+  var exdate = new Date();
+  exdate.setDate(exdate.getDate() + expiredays);
+  document.cookies = cookieName + "=" + escape(cookieValue) + ((expiredays == null) ? "" : ";expires = " + exdate.toGMTString())
+}
+
+// 获取cookie值
+function getCookie(cookieName) {
+    // your implement
+  if (document.cookie.length > 0) {
+		var c_start = document.cookie.indexOf(cookieName + "=")
+		if (c_start != -1) {
+			c_start = c_start + cookieName.length + 1
+			var c_end = document.cookie.indexOf(";", c_start)
+			if (c_end == -1) c_end = document.cookie.length
+			return unescape(document.cookie.substring(c_start, c_end))
+		}
+	}
+	return ""
+}
+
+
+
+
+
+
