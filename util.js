@@ -391,9 +391,14 @@ $.delegate = delegateEvent;
 $.delegate($("#list"), "li", "click", clickHandle);
 
 // 判断是否为IE浏览器，返回-1或者版本号
-function isIE(window.ie) {
+function isIE() {
     // your implement
-  alert(navigator.appVersion);
+	if (!!window.ActiveXObject || "ActiveXObject" in window)
+            { alert(navigator.appVersion);
+	     return true; }
+     else
+            { return false; }
+  
 }
 
 // 设置cookie
@@ -420,7 +425,46 @@ function getCookie(cookieName) {
 }
 
 
+//学习Ajax，并尝试自己封装一个Ajax方法。实现如下方法：
 
+// 
+function ajax(url, options) {
+    // your implement
+	
+	var xhr ;
+	if(window.XMLHttpRequest){
+		xhr = new XHRHttpRequest();
+	}else{
+		xhr = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	
+	if(xhr.readyState == 4 && xhr.status == 200 || xhr.status == 304){
+	   	options.onsuccess();
+	   }else{
+	   	options.onfail();
+	   }
+	type = options.type||get;
+	xhr.open(type, url, true);
+	if(type == "get"){
+	   xhr.send(null);
+	   }else{
+		xhr.send(options.data);
+	   }
+}
+
+// 使用示例：
+ajax(
+    'http://localhost:8080/server/ajaxtest', 
+    {
+        data: {
+            name: 'simon',
+            password: '123456'
+        },
+        onsuccess: function (responseText, xhr) {
+            console.log(responseText);
+        }
+    }
+);
 
 
 
