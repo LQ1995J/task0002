@@ -433,12 +433,12 @@ function ajax(url, options) {
 	
 	var xhr ;
 	if(window.XMLHttpRequest){
-		xhr = new XHRHttpRequest();
+		xhr = new XHRHttpRequest(); //IE7+,FireFox等其他浏览器
 	}else{
-		xhr = new ActiveXObject("Microsoft.XMLHTTP");
+		xhr = new ActiveXObject("Microsoft.XMLHTTP"); //IE7之前的浏览器
 	}
 	
-	if(xhr.readyState == 4 && xhr.status == 200 || xhr.status == 304){
+	if(xhr.readyState == 4 && xhr.status == 200 || xhr.status == 304){//同步请求检测status，异步请求检测readyState
 	   	options.onsuccess();
 	   }else{
 	   	options.onfail();
@@ -448,7 +448,7 @@ function ajax(url, options) {
 	if(type == "get"){
 	   xhr.send(null);
 	   }else{
-		xhr.send(options.data);
+		xhr.send(options.data); //post请求应该把数据作为请求的主体提交。
 	   }
 }
 
